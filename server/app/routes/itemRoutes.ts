@@ -33,12 +33,14 @@ router.post("/", createItem);
 /**
  * @route PUT /api/items/:id
  * @desc Update an item by ID
+ * @param {string} id - The ID of the item to update
  */
 router.put("/:id", updateItem);
 
 /**
  * @route DELETE /api/items/:id
  * @desc Delete an item by ID
+ * @param {string} id - The ID of the item to delete
  */
 router.delete("/:id", deleteItem);
 

@@ -2,6 +2,7 @@ import { Router } from "express";
 import {
   getCategories,
   createCategory,
+  updateCategory,
   deleteCategory,
 } from "../controllers/categoriesController.js";
 import { authMiddleware } from "../middlewares/authMiddleware.js";
@@ -23,8 +24,16 @@ router.get("/", getCategories);
 router.post("/", createCategory);
 
 /**
+ * @route PUT /api/categories/:id
+ * @desc Update a category by ID
+ * @param {string} id - The ID of the category to update
+ */
+router.put("/:id", updateCategory);
+
+/**
  * @route DELETE /api/categories/:id
  * @desc Delete a category by ID
+ * @param {string} id - The ID of the category to delete
  */
 router.delete("/:id", deleteCategory);
 

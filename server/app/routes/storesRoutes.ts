@@ -2,6 +2,7 @@ import { Router } from "express";
 import {
   getStores,
   createStore,
+  updateStore,
   deleteStore,
 } from "../controllers/storesController.js";
 import { authMiddleware } from "../middlewares/authMiddleware.js";
@@ -23,8 +24,16 @@ router.get("/", getStores);
 router.post("/", createStore);
 
 /**
+ * @route PUT /api/stores/:id
+ * @desc Update a store by ID
+ * @param {string} id - The ID of the store to update
+ */
+router.put("/:id", updateStore);
+
+/**
  * @route DELETE /api/stores/:id
  * @desc Delete a store by ID
+ * @param {string} id - The ID of the store to delete
  */
 router.delete("/:id", deleteStore);
 

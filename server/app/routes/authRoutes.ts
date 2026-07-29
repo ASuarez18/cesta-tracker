@@ -1,5 +1,5 @@
 import { Router } from "express";
-import { register, login, getProfile } from "../controllers/authController.ts";
+import { register, login, logout, getProfile } from "../controllers/authController.ts";
 import { authMiddleware } from "../middlewares/authMiddleware.js";
 
 const router = Router();
@@ -17,6 +17,13 @@ router.post("/register", register);
  * @access Public
  */
 router.post("/login", login);
+
+/**
+ * @route POST /api/auth/logout
+ * @desc Clear user session cookie
+ * @access Public
+ */
+router.post("/logout", logout);
 
 /**
  * @route GET /api/auth/me
