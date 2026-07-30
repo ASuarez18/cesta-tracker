@@ -12,3 +12,8 @@ export interface CreateStorePayload {
 export interface UpdateStorePayload {
   name: string;
 }
+
+export interface StoreResponse {
+  message: string;
+  store: Store;
+}

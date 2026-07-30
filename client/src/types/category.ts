@@ -14,3 +14,9 @@ export interface UpdateCategoryPayload {
   name?: string;
   color_hex?: string;
 }
+
+
+export interface CategoryResponse {
+  message: string;
+  category: Category;
+  }

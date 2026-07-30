@@ -46,3 +46,13 @@ export interface UpdateListItemPayload {
   price_at_purchase?: number;
   is_completed?: boolean;
 }
+
+export interface ShoppingListResponse {
+  message: string;
+  list: ShoppingList;
+}
+
+export interface ListItemResponse {
+  message: string;
+  list_item: ListItem;
+}

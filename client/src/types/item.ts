@@ -26,3 +26,8 @@ export interface UpdateItemPayload {
   default_store_id?: number | null;
   default_price?: number;
 }
+
+export interface ItemResponse {
+  message: string;
+  item: Item;
+}
