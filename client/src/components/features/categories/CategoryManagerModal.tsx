@@ -14,7 +14,7 @@ export const CategoryManagerModal: React.FC<CategoryManagerModalProps> = ({
   onClose,
   onCategoriesUpdated,
 }) => {
-  // -
+  // - Fetch states
   const [categories, setCategories] = useState<Category[]>([]);
   const [isLoading, setIsLoading] = useState(false);
   const [error, setError] = useState<string | null>(null);
@@ -51,7 +51,7 @@ export const CategoryManagerModal: React.FC<CategoryManagerModalProps> = ({
 
   /**
    * @function resetForm
-   * @desc restes form fields and editing state when modal is closed or after submission
+   * @desc resets form fields and editing state when modal is closed or after submission
    */
   const resetForm = () => {
     setEditingCategory(null);
@@ -106,6 +106,11 @@ export const CategoryManagerModal: React.FC<CategoryManagerModalProps> = ({
     }
   };
 
+  /**
+   * @function handleDelete
+   * @desc Deletes a category after user confirmation
+   * @param {number} categoryId - The ID of the category to delete
+   */
   const handleDelete = async (categoryId: number) => {
     if (!window.confirm("Are you sure you want to delete this category?"))
       return;
