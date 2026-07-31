@@ -1,0 +1,25 @@
+---
+import AppLayout from "../../layouts/AppLayout.astro";
+import CategoryBadge from "../../components/features/categories/CategoryBadge.astro";
+import { CategoryManagerView } from "../../components/features/categories/CategoryManagerView";
+
+// Nota: Esta vista combina la presentación estética de categorías y tiendas
+// permitiendo interactuar con los modales de administración directamente.
+---
+
+<AppLayout title="Categories & Stores - Cesta Tracker">
+  <div class="space-y-8">
+    <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-4 border-b border-carbon-black-200 pb-5">
+      <div>
+        <h1 class="text-2xl sm:text-3xl font-bold font-display text-carbon-black-900 tracking-tight">
+          Categories & Stores
+        </h1>
+        <p class="text-xs sm:text-sm text-carbon-black-600 mt-1">
+          Organize your product catalog by grouping items into categories and assign preferred stores.
+        </p>
+      </div>
+    </div>
+
+    <CategoryManagerView client:load />
+  </div>
+</AppLayout>

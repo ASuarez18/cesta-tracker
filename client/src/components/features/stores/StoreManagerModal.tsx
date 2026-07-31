@@ -34,7 +34,7 @@ export const StoreManagerModal: React.FC<StoreManagerModalProps> = ({
       setIsLoading(true);
       setError(null);
       const data = await storesApi.getAll();
-      setStores(data);
+      setStores(Array.isArray(data) ? data : []);
     } catch (err: any) {
       setError(err.message || "Failed to load stores.");
     } finally {

@@ -34,7 +34,7 @@ export const CategoryManagerModal: React.FC<CategoryManagerModalProps> = ({
       setIsLoading(true);
       setError(null);
       const data = await categoriesApi.getAll();
-      setCategories(data);
+      setCategories(Array.isArray(data) ? data : []);
     } catch (err: any) {
       setError(err.message || "Failed to load categories.");
     } finally {
@@ -124,6 +124,8 @@ export const CategoryManagerModal: React.FC<CategoryManagerModalProps> = ({
       setError(err.message || "Failed to delete category.");
     }
   };
+
+  const hasCategories = Array.isArray(categories) && categories.length > 0;
 
   return (
     <Modal
@@ -219,7 +221,7 @@ export const CategoryManagerModal: React.FC<CategoryManagerModalProps> = ({
             <div className="py-6 text-center text-xs text-carbon-black-500">
               Loading categories...
             </div>
-          ) : categories.length === 0 ? (
+          ) : !hasCategories ? (
             <div className="py-6 text-center text-xs text-carbon-black-500 border border-dashed border-carbon-black-200 rounded-xl">
               No categories created yet.
             </div>
