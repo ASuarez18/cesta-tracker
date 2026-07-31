@@ -9,8 +9,8 @@ export interface Item {
   
   // Optional data from JOINs
   category_name?: string | null;
-  category_color_hex?: string | null;
-  store_name?: string | null;
+  category_color?: string | null;
+  default_store_name?: string | null;
 }
 
 export interface CreateItemPayload {
