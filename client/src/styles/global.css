@@ -1,1 +1,55 @@
+@import url("https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:opsz,wght@12..96,200..800&family=Inter:ital,opsz,wght@0,14..32,100..900;1,14..32,100..900&display=swap");
 @import "tailwindcss";
+
+@theme {
+  --font-sans: "Inter", -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
+  --font-display: "Bricolage Grotesque", sans-serif;
+  
+  --color-carbon-black-50: #f3f4f1;
+  --color-carbon-black-100: #e7e8e3;
+  --color-carbon-black-200: #d0d2c6;
+  --color-carbon-black-300: #b8bbaa;
+  --color-carbon-black-400: #a0a48e;
+  --color-carbon-black-500: #898e71;
+  --color-carbon-black-600: #6d715b;
+  --color-carbon-black-700: #525544;
+  --color-carbon-black-800: #37392d;
+  --color-carbon-black-900: #1b1c17;
+  --color-carbon-black-950: #131410;
+
+  --color-dusty-olive-50: #f0f4f1;
+  --color-dusty-olive-100: #e2e9e3;
+  --color-dusty-olive-200: #c5d3c7;
+  --color-dusty-olive-300: #a8bdab;
+  --color-dusty-olive-400: #8ba78f;
+  --color-dusty-olive-500: #6e9174;
+  --color-dusty-olive-600: #58745c;
+  --color-dusty-olive-700: #425745;
+  --color-dusty-olive-800: #2c3a2e;
+  --color-dusty-olive-900: #161d17;
+  --color-dusty-olive-950: #0f1410;
+
+  --color-celadon-50: #e9fcf3;
+  --color-celadon-100: #d2f9e6;
+  --color-celadon-200: #a6f2cd;
+  --color-celadon-300: #79ecb4;
+  --color-celadon-400: #4ce69c;
+  --color-celadon-500: #20df83;
+  --color-celadon-600: #19b369;
+  --color-celadon-700: #13864e;
+  --color-celadon-800: #0d5934;
+  --color-celadon-900: #062d1a;
+  --color-celadon-950: #041f12;
+
+  --color-frozen-water-50: #e5fff8;
+  --color-frozen-water-100: #ccfff1;
+  --color-frozen-water-200: #99ffe4;
+  --color-frozen-water-300: #66ffd6;
+  --color-frozen-water-400: #33ffc9;
+  --color-frozen-water-500: #00ffbb;
+  --color-frozen-water-600: #00cc96;
+  --color-frozen-water-700: #009970;
+  --color-frozen-water-800: #00664b;
+  --color-frozen-water-900: #003325;
+  --color-frozen-water-950: #00241a;
+}

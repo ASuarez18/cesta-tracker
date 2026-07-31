@@ -1,0 +1,8 @@
+---
+import AuthLayout from "../layouts/AuthLayout.astro";
+import { LoginForm } from "../components/features/auth/LoginForm";
+---
+
+<AuthLayout header="Sign In" title="Sign In - Cesta Tracker">
+  <LoginForm client:load />
+</AuthLayout>

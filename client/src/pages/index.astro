@@ -1,0 +1,27 @@
+---
+import BaseLayout from "../layouts/BaseLayout.astro";
+---
+
+<BaseLayout title="Cesta Tracker - Redirecting...">
+  <script>
+    import { authApi } from "../lib/api/auth";
+
+    async function checkAuthAndRedirect() {
+      try {
+        await authApi.getMe();
+        window.location.href = "/app/dashboard";
+      } catch {
+        window.location.href = "/login";
+      }
+    }
+
+    checkAuthAndRedirect();
+  </script>
+
+  <div class="flex-1 flex items-center justify-center p-4">
+    <div class="text-center space-y-3">
+      <div class="animate-spin text-4xl">🛒</div>
+      <p class="text-sm font-medium text-gray-600">Loading Cesta Tracker...</p>
+    </div>
+  </div>
+</BaseLayout>

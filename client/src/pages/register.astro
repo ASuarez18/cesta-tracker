@@ -1,0 +1,8 @@
+---
+import AuthLayout from "../layouts/AuthLayout.astro";
+import { RegisterForm } from "../components/features/auth/RegisterForm";
+---
+
+<AuthLayout header="Create Account" title="Register - Cesta Tracker">
+  <RegisterForm client:load />
+</AuthLayout>
