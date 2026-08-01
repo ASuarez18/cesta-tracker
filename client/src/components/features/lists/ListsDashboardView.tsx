@@ -110,7 +110,7 @@ export const ListsDashboardView: React.FC = () => {
       ) : (
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
           {filteredLists.map((list) => {
-            const totalSpent = list.total_spent ?? 0;
+            const totalSpent = list.total_estimated ?? 0;
             const budget = list.budget ?? 0;
             const hasBudget = list.budget !== null && list.budget > 0;
             const isOver = hasBudget && totalSpent > budget;

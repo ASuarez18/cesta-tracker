@@ -25,7 +25,8 @@ export interface ShoppingList {
   closed_at: string | null;
   
   // Calculated fields from JOINs
-  total_spent?: number;
+  total_estimated?: number;
+  total_completed?: number;
   items_count?: number;
   items?: ListItem[];
 }
