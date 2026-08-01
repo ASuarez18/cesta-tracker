@@ -38,7 +38,10 @@ export const DashboardView: React.FC = () => {
   const activeLists = lists.filter((l) => l.status === "OPEN");
   const closedLists = lists.filter((l) => l.status === "CLOSED");
 
-  // Sum total spent across closed lists (historical)
+  /**
+   * @var totalHistoricalSpent
+   * @desc Calculates the total amount spent across all closed shopping lists
+   */
   const totalHistoricalSpent = closedLists.reduce(
     (acc, curr) => acc + (curr.total_completed || 0),
     0
@@ -46,7 +49,7 @@ export const DashboardView: React.FC = () => {
 
   return (
     <div className="space-y-8">
-      {/* Welcome Banner */}
+      {/* > Welcome Banner */}
       <div className="bg-linear-to-r from-dusty-olive-800 to-carbon-black-900 rounded-3xl p-6 sm:p-8 text-white shadow-sm flex flex-col sm:flex-row items-start sm:items-center justify-between gap-6">
         <div className="space-y-2 max-w-xl">
           <span className="inline-block px-3 py-1 bg-white/10 text-frozen-water-300 text-xs font-mono font-medium rounded-full">
@@ -68,9 +71,9 @@ export const DashboardView: React.FC = () => {
         </a>
       </div>
 
-      {/* Metrics Row */}
+      {/* > Metrics Row */}
       <div className="grid grid-cols-1 sm:grid-cols-3 gap-4">
-        {/* Active Lists Metric */}
+        {/* Active Lists */}
         <div className="bg-white border border-carbon-black-100 rounded-2xl p-5 shadow-2xs space-y-2">
           <div className="flex items-center justify-between text-carbon-black-500">
             <span className="text-xs font-semibold uppercase tracking-wider">
@@ -84,7 +87,7 @@ export const DashboardView: React.FC = () => {
           <p className="text-xs text-carbon-black-500">Pending lists in progress</p>
         </div>
 
-        {/* Master Catalog Items */}
+        {/* Total Items */}
         <div className="bg-white border border-carbon-black-100 rounded-2xl p-5 shadow-2xs space-y-2">
           <div className="flex items-center justify-between text-carbon-black-500">
             <span className="text-xs font-semibold uppercase tracking-wider">
@@ -98,7 +101,7 @@ export const DashboardView: React.FC = () => {
           <p className="text-xs text-carbon-black-500">Saved items in master catalog</p>
         </div>
 
-        {/* Total Spent in History */}
+        {/* Total Spent */}
         <div className="bg-white border border-carbon-black-100 rounded-2xl p-5 shadow-2xs space-y-2">
           <div className="flex items-center justify-between text-carbon-black-500">
             <span className="text-xs font-semibold uppercase tracking-wider">
@@ -113,7 +116,7 @@ export const DashboardView: React.FC = () => {
         </div>
       </div>
 
-      {/* Active Run Quick Access */}
+      {/* > Latest List */}
       <div className="bg-white border border-carbon-black-100 rounded-2xl p-6 shadow-2xs space-y-4">
         <div className="flex items-center justify-between border-b border-carbon-black-100 pb-4">
           <h2 className="text-lg font-bold font-display text-carbon-black-900">

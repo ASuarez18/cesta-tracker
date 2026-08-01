@@ -110,10 +110,13 @@ export const ListsDashboardView: React.FC = () => {
       ) : (
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
           {filteredLists.map((list) => {
-            const totalSpent = list.total_estimated ?? 0;
+
+            const totalEstimated = list.total_estimated ?? 0;
+            const totalSpent = list.total_completed ?? 0;
             const budget = list.budget ?? 0;
             const hasBudget = list.budget !== null && list.budget > 0;
             const isOver = hasBudget && totalSpent > budget;
+            const status = list.status || "OPEN";
 
             return (
               <a
@@ -151,7 +154,7 @@ export const ListsDashboardView: React.FC = () => {
                         isOver ? "text-red-600" : "text-carbon-black-900"
                       }`}
                     >
-                      {formatCurrency(totalSpent)}
+                      {status === "OPEN" ? formatCurrency(totalEstimated) : formatCurrency(totalSpent)}
                     </span>
                   </div>
                   <div>
