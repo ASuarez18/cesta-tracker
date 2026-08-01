@@ -22,7 +22,7 @@ const sessionMiddleware = cookieSession({
     name: "session",
     keys: [process.env.SESSION_SECRET || "secret"],
     sameSite: "none",
-    secure: process.env.NODE_ENV === "production",
+    secure: true,
     httpOnly: true,
   });
 
