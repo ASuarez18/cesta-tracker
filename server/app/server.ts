@@ -14,14 +14,16 @@ const PORT = process.env.PORT || 3000;
 const app = express();
 
 // > CORS 
-app.use(cors({ origin: "http://localhost:4321", credentials: true }));
+app.use(cors({ origin: process.env.FRONTEND_URL || "http://localhost:4321", credentials: true }));
 
 // > Cookie Session
 const sessionMiddleware = cookieSession({
-  name: "session",
-  keys: ["key1", "key2", "key3"],
-  maxAge: 7 * 24 * 60 * 60 * 1000, // 7 days
-});
+    name: "session",
+    keys: [process.env.SESSION_SECRET || "secret"],
+    sameSite: "none",
+    secure: process.env.NODE_ENV === "production",
+    httpOnly: true,
+  });
 
 // > Parsers
 app.use(cookieParser("our unique encryption algorithm"));
