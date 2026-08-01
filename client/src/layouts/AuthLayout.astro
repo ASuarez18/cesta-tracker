@@ -6,15 +6,27 @@ interface Props {
   title?: string;
 }
 
-const { header = "Authentication", title = `${header} - Cesta Tracker` } = Astro.props;
+const { header = "Authentication", title = `${header} - Cesta Tracker` } =
+  Astro.props;
 ---
 
 <BaseLayout title={title}>
   <main class="flex-1 flex items-center justify-center p-4 sm:p-6 lg:p-8">
-    <div class="w-full max-w-md bg-white p-6 sm:p-8 rounded-2xl shadow-sm border border-carbon-black-100">
+    <div
+      class="w-full max-w-md bg-white p-6 sm:p-8 rounded-2xl shadow-sm border border-carbon-black-100"
+    >
       <div class="text-center mb-6">
-        <h1 class="font-display text-3xl font-bold text-carbon-black-900 tracking-tight">🛒 Cesta Tracker</h1>
-        <h2 class="font-display text-xl font-semibold text-dusty-olive-700 tracking-tight mt-1">{header}</h2>
+        <div class="flex items-center justify-center gap-2">
+          <img src="/favicon.svg" alt="Cesta Tracker Logo" class="h-10 w-auto" />
+          <h1 class="font-display text-3xl font-bold text-carbon-black-900 tracking-tight">
+            Cesta Tracker
+          </h1>
+        </div>
+        <h2
+          class="font-display text-xl font-semibold text-dusty-olive-700 tracking-tight mt-1"
+        >
+          {header}
+        </h2>
       </div>
       <slot />
     </div>
