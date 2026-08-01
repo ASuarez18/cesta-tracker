@@ -95,4 +95,15 @@ export const listsApi = {
     apiClient<{ message: string }>(`/lists/items/${listItemId}`, {
       method: "DELETE",
     }),
+
+    /**
+     * @function closeList
+     * @desc Closes a shopping list with the provided list ID, marking it as completed
+     * @param {number} listId - The ID of the shopping list to close
+     * @returns {Promise<{ message: string }>} - A promise that resolves to an object containing a message indicating successful closure
+     */
+    closeList: (listId: number) =>
+    apiClient<{ message: string }>(`/lists/${listId}/close`, {
+      method: "POST",
+    }),
 };

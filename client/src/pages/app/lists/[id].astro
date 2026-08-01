@@ -1,0 +1,25 @@
+---
+export const prerender = false;
+
+import AppLayout from "../../../layouts/AppLayout.astro";
+import { ListDetail } from "../../../components/features/lists/ListDetail";
+
+const { id } = Astro.params;
+const listId = id ? parseInt(id, 10) : 0;
+---
+
+<AppLayout title="Grocery Checklist - Cesta Tracker">
+  <div class="max-w-4xl mx-auto space-y-6">
+    {/* > Go Back */}
+    <div>
+      <a
+        href="/app/lists"
+        class="inline-flex items-center gap-1 text-xs sm:text-sm font-medium text-carbon-black-600 hover:text-dusty-olive-800 transition-colors"
+      >
+        <span>←</span> Back to All Lists
+      </a>
+    </div>
+
+    <ListDetail listId={listId} client:load />
+  </div>
+</AppLayout>
