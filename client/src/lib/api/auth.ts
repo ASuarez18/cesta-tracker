@@ -17,6 +17,7 @@ export const authApi = {
   register: (name: string, email: string, password: string) =>
     apiClient<AuthResponse>("/auth/register", {
       method: "POST",
+      credentials: "include",
       body: JSON.stringify({ name, email, password }),
     }),
   
@@ -30,6 +31,7 @@ export const authApi = {
   login: (email: string, password: string) =>
     apiClient<AuthResponse>("/auth/login", {
       method: "POST",
+      credentials: "include",
       body: JSON.stringify({ email, password }),
     }),
 
@@ -40,6 +42,7 @@ export const authApi = {
   logout: () =>
     apiClient<{ message: string }>("/auth/logout", {
       method: "POST",
+      credentials: "include",
     }),
 
   /**
@@ -50,5 +53,6 @@ export const authApi = {
   getMe: () =>
     apiClient<{ user: User }>("/auth/me", {
       method: "GET",
+      credentials: "include",
     }),
 };

@@ -19,6 +19,7 @@ export const categoriesApi = {
   getAll: () =>
     apiClient<Category[]>("/categories", {
       method: "GET",
+      credentials: "include",
     }),
 
   /**
@@ -30,6 +31,7 @@ export const categoriesApi = {
   create: (payload: CreateCategoryPayload) =>
     apiClient<CategoryResponse>("/categories", {
       method: "POST",
+      credentials: "include",
       body: JSON.stringify(payload),
     }),
 
@@ -43,6 +45,7 @@ export const categoriesApi = {
   update: (id: number, payload: UpdateCategoryPayload) =>
     apiClient<CategoryResponse>(`/categories/${id}`, {
       method: "PUT",
+      credentials: "include",
       body: JSON.stringify(payload),
     }),
 
@@ -55,5 +58,6 @@ export const categoriesApi = {
   delete: (id: number) =>
     apiClient<{ message: string }>(`/categories/${id}`, {
       method: "DELETE",
+      credentials: "include",
     }),
 };

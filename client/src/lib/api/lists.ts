@@ -22,6 +22,7 @@ export const listsApi = {
   getAll: () =>
     apiClient<ShoppingList[]>("/lists", {
       method: "GET",
+      credentials: "include",
     }),
 
   /**
@@ -33,6 +34,7 @@ export const listsApi = {
   getById: (id: number) =>
     apiClient<ShoppingList>(`/lists/${id}`, {
       method: "GET",
+      credentials: "include",
     }),
 
   /**
@@ -44,6 +46,7 @@ export const listsApi = {
   create: (payload: CreateListPayload) =>
     apiClient<ShoppingListResponse>("/lists", {
       method: "POST",
+      credentials: "include",
       body: JSON.stringify(payload),
     }),
 
@@ -56,6 +59,7 @@ export const listsApi = {
   delete: (id: number) =>
     apiClient<{ message: string }>(`/lists/${id}`, {
       method: "DELETE",
+      credentials: "include",
     }),
 
   // > Managing items within a shopping list
@@ -69,6 +73,7 @@ export const listsApi = {
   addItem: (listId: number, payload: AddItemToListPayload) =>
     apiClient<ListItemResponse>(`/lists/${listId}/items`, {
       method: "POST",
+      credentials: "include",
       body: JSON.stringify(payload),
     }),
 
@@ -82,6 +87,7 @@ export const listsApi = {
   updateItem: (listItemId: number, payload: UpdateListItemPayload) =>
     apiClient<ListItemResponse>(`/lists/items/${listItemId}`, {
       method: "PATCH",
+      credentials: "include",
       body: JSON.stringify(payload),
     }),
 
@@ -94,6 +100,7 @@ export const listsApi = {
   removeItem: (listItemId: number) =>
     apiClient<{ message: string }>(`/lists/items/${listItemId}`, {
       method: "DELETE",
+      credentials: "include",
     }),
 
     /**
@@ -105,5 +112,6 @@ export const listsApi = {
     closeList: (listId: number) =>
     apiClient<{ message: string }>(`/lists/${listId}/close`, {
       method: "POST",
+      credentials: "include",
     }),
 };

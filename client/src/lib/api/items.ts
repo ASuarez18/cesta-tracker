@@ -19,6 +19,7 @@ export const itemsApi = {
   getAll: () =>
     apiClient<Item[]>("/items", {
       method: "GET",
+      credentials: "include",
     }),
 
   /**
@@ -30,6 +31,7 @@ export const itemsApi = {
   getById: (id: number) =>
     apiClient<Item>(`/items/${id}`, {
       method: "GET",
+      credentials: "include",
     }),
 
   /**
@@ -41,6 +43,7 @@ export const itemsApi = {
   create: (payload: CreateItemPayload) =>
     apiClient<ItemResponse>("/items", {
       method: "POST",
+      credentials: "include",
       body: JSON.stringify(payload),
     }),
 
@@ -54,6 +57,7 @@ export const itemsApi = {
   update: (id: number, payload: UpdateItemPayload) =>
     apiClient<ItemResponse>(`/items/${id}`, {
       method: "PUT",
+      credentials: "include",
       body: JSON.stringify(payload),
     }),
 
@@ -66,5 +70,6 @@ export const itemsApi = {
   delete: (id: number) =>
     apiClient<{ message: string }>(`/items/${id}`, {
       method: "DELETE",
+      credentials: "include",
     }),
 };

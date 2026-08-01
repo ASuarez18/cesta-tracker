@@ -19,6 +19,7 @@ export const storesApi = {
   getAll: () =>
     apiClient<Store[]>("/stores", {
       method: "GET",
+      credentials: "include",
     }),
 
   /**
@@ -30,6 +31,7 @@ export const storesApi = {
   create: (payload: CreateStorePayload) =>
     apiClient<StoreResponse>("/stores", {
       method: "POST",
+      credentials: "include",
       body: JSON.stringify(payload),
     }),
 
@@ -43,6 +45,7 @@ export const storesApi = {
   update: (id: number, payload: UpdateStorePayload) =>
     apiClient<StoreResponse>(`/stores/${id}`, {
       method: "PUT",
+      credentials: "include",
       body: JSON.stringify(payload),
     }),
 
@@ -55,5 +58,6 @@ export const storesApi = {
   delete: (id: number) =>
     apiClient<{ message: string }>(`/stores/${id}`, {
       method: "DELETE",
+      credentials: "include",
     }),
 };
