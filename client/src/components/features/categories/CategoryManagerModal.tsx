@@ -2,6 +2,8 @@ import React, { useState, useEffect } from "react";
 import { Modal } from "../../ui/Modal";
 import { categoriesApi } from "../../../lib/api/categories";
 import type { Category } from "../../../types/category";
+import type { ConfirmModalProps } from "../../../types/ui";
+import { ConfirmModal } from "../../ui/ConfirmModal";
 
 interface CategoryManagerModalProps {
   isOpen: boolean;
@@ -25,6 +27,16 @@ export const CategoryManagerModal: React.FC<CategoryManagerModalProps> = ({
   const [colorHex, setColorHex] = useState("#58a778");
   const [isSubmitting, setIsSubmitting] = useState(false);
 
+  // - Confirmation Modal state
+  const [confirmModal, setConfirmModal] = useState<ConfirmModalProps>({
+    isOpen: false,
+    title: "",
+    message: "",
+    confirmText: "Confirm",
+    isDanger: false,
+    onConfirm: async () => {},
+  });
+
   /**
    * @function fetchCategories
    * @desc Gets the categories from api call and saves them in categories state
@@ -46,6 +58,8 @@ export const CategoryManagerModal: React.FC<CategoryManagerModalProps> = ({
     if (isOpen) {
       fetchCategories();
       resetForm();
+    } else {
+      closeConfirmModal();
     }
   }, [isOpen]);
 
@@ -107,22 +121,40 @@ export const CategoryManagerModal: React.FC<CategoryManagerModalProps> = ({
   };
 
   /**
-   * @function handleDelete
-   * @desc Deletes a category after user confirmation
-   * @param {number} categoryId - The ID of the category to delete
+   * @function closeConfirmModal
+   * @desc Closes the confirmation modal
    */
-  const handleDelete = async (categoryId: number) => {
-    if (!window.confirm("Are you sure you want to delete this category?"))
-      return;
+  const closeConfirmModal = () => {
+    setConfirmModal((prev) => ({ ...prev, isOpen: false }));
+  };
 
-    setError(null);
-    try {
-      await categoriesApi.delete(categoryId);
-      await fetchCategories();
-      if (onCategoriesUpdated) onCategoriesUpdated();
-    } catch (err: any) {
-      setError(err.message || "Failed to delete category.");
-    }
+  /**
+   * @function handleDelete
+   * @desc Opens the ConfirmModal before deleting a category
+   * @param {Category} category - The category object to delete
+   */
+  const handleDelete = (category: Category) => {
+    if (!isOpen) return;
+
+    setConfirmModal({
+      isOpen: true,
+      title: "Delete Category",
+      message: `Are you sure you want to delete "${category.name}"? This action cannot be undone.`,
+      confirmText: "Delete",
+      isDanger: true,
+      onConfirm: async () => {
+        setError(null);
+        try {
+          await categoriesApi.delete(category.category_id);
+          await fetchCategories();
+          if (onCategoriesUpdated) onCategoriesUpdated();
+        } catch (err: any) {
+          setError(err.message || "Failed to delete category.");
+        } finally {
+          closeConfirmModal();
+        }
+      },
+    });
   };
 
   const hasCategories = Array.isArray(categories) && categories.length > 0;
@@ -192,7 +224,7 @@ export const CategoryManagerModal: React.FC<CategoryManagerModalProps> = ({
               <button
                 type="button"
                 onClick={resetForm}
-                className="px-3 py-1.5 text-xs font-medium text-carbon-black-700 hover:bg-carbon-black-200 rounded-lg transition-colors"
+                className="px-3 py-1.5 text-xs font-medium text-carbon-black-700 hover:bg-carbon-black-200 rounded-lg transition-colors cursor-pointer"
               >
                 Cancel
               </button>
@@ -200,7 +232,7 @@ export const CategoryManagerModal: React.FC<CategoryManagerModalProps> = ({
             <button
               type="submit"
               disabled={isSubmitting || !name.trim()}
-              className="px-4 py-1.5 text-xs sm:text-sm font-semibold text-white bg-dusty-olive-700 hover:bg-dusty-olive-800 rounded-lg transition-all shadow-xs disabled:opacity-50"
+              className="px-4 py-1.5 text-xs sm:text-sm font-semibold text-white bg-dusty-olive-700 cursor-pointer hover:bg-dusty-olive-800 rounded-lg transition-all shadow-xs disabled:opacity-50 disabled:cursor-not-allowed"
             >
               {isSubmitting
                 ? "Saving..."
@@ -245,14 +277,14 @@ export const CategoryManagerModal: React.FC<CategoryManagerModalProps> = ({
                   <div className="flex items-center gap-1 shrink-0">
                     <button
                       onClick={() => handleEditClick(cat)}
-                      className="p-1.5 text-xs font-medium text-dusty-olive-700 hover:bg-dusty-olive-50 rounded-lg transition-colors"
+                      className="p-1.5 text-xs font-medium text-dusty-olive-700 cursor-pointer hover:bg-dusty-olive-50 rounded-lg transition-colors"
                       title="Edit Category"
                     >
                       Edit
                     </button>
                     <button
-                      onClick={() => handleDelete(cat.category_id)}
-                      className="p-1.5 text-xs font-medium text-red-600 hover:bg-red-50 rounded-lg transition-colors"
+                      onClick={() => handleDelete(cat)}
+                      className="p-1.5 text-xs font-medium text-red-600 cursor-pointer hover:bg-red-50 rounded-lg transition-colors"
                       title="Delete Category"
                     >
                       Delete
@@ -264,6 +296,16 @@ export const CategoryManagerModal: React.FC<CategoryManagerModalProps> = ({
           )}
         </div>
       </div>
+
+      <ConfirmModal
+        isOpen={confirmModal.isOpen}
+        onClose={closeConfirmModal}
+        title={confirmModal.title}
+        message={confirmModal.message}
+        confirmText={confirmModal.confirmText}
+        isDanger={confirmModal.isDanger}
+        onConfirm={confirmModal.onConfirm}
+      />
     </Modal>
   );
 };

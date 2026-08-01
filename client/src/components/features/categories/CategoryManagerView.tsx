@@ -66,7 +66,7 @@ export const CategoryManagerView: React.FC = () => {
             </div>
             <button
               onClick={() => setIsCategoryModalOpen(true)}
-              className="px-3.5 py-2 text-xs sm:text-sm font-semibold text-white bg-dusty-olive-700 hover:bg-dusty-olive-800 rounded-xl transition-all shadow-xs active:scale-[0.98]"
+              className="px-3.5 py-2 text-xs sm:text-sm font-semibold text-white bg-dusty-olive-700 cursor-pointer hover:bg-dusty-olive-800 rounded-xl transition-all shadow-xs active:scale-[0.98]"
             >
               Manage Categories
             </button>
@@ -122,7 +122,7 @@ export const CategoryManagerView: React.FC = () => {
             </div>
             <button
               onClick={() => setIsStoreModalOpen(true)}
-              className="px-3.5 py-2 text-xs sm:text-sm font-semibold text-white bg-dusty-olive-700 hover:bg-dusty-olive-800 rounded-xl transition-all shadow-xs active:scale-[0.98]"
+              className="px-3.5 py-2 text-xs sm:text-sm font-semibold text-white bg-dusty-olive-700 cursor-pointer hover:bg-dusty-olive-800 rounded-xl transition-all shadow-xs active:scale-[0.98]"
             >
               Manage Stores
             </button>

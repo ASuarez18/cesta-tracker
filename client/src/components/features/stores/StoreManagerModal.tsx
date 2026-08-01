@@ -2,6 +2,8 @@ import React, { useState, useEffect } from "react";
 import { Modal } from "../../ui/Modal";
 import { storesApi } from "../../../lib/api/stores";
 import type { Store } from "../../../types/store";
+import type { ConfirmModalProps } from "../../../types/ui";
+import { ConfirmModal } from "../../ui/ConfirmModal";
 
 interface StoreManagerModalProps {
   isOpen: boolean;
@@ -14,7 +16,6 @@ export const StoreManagerModal: React.FC<StoreManagerModalProps> = ({
   onClose,
   onStoresUpdated,
 }) => {
-
   // - Fetch states
   const [stores, setStores] = useState<Store[]>([]);
   const [isLoading, setIsLoading] = useState(false);
@@ -24,6 +25,16 @@ export const StoreManagerModal: React.FC<StoreManagerModalProps> = ({
   const [editingStore, setEditingStore] = useState<Store | null>(null);
   const [name, setName] = useState("");
   const [isSubmitting, setIsSubmitting] = useState(false);
+
+  // - Confirmation Modal state
+  const [confirmModal, setConfirmModal] = useState<ConfirmModalProps>({
+    isOpen: false,
+    title: "",
+    message: "",
+    confirmText: "Confirm",
+    isDanger: false,
+    onConfirm: async () => {},
+  });
 
   /**
    * @function fetchStores
@@ -103,21 +114,43 @@ export const StoreManagerModal: React.FC<StoreManagerModalProps> = ({
   };
 
   /**
+   * @function closeConfirmModal
+   * @desc Closes the confirmation modal
+   */
+  const closeConfirmModal = () => {
+    setConfirmModal((prev) => ({ ...prev, isOpen: false }));
+  };
+
+  /**
    * @function handleDelete
    * @desc Deletes a category after user confirmation
    * @param {number} categoryId - The ID of the category to delete
    */
-  const handleDelete = async (storeId: number) => {
-    if (!window.confirm("Are you sure you want to delete this store?")) return;
+  const handleDelete = (storeId: number) => {
+    if (!isOpen) return;
 
-    setError(null);
-    try {
-      await storesApi.delete(storeId);
-      await fetchStores();
-      if (onStoresUpdated) onStoresUpdated();
-    } catch (err: any) {
-      setError(err.message || "Failed to delete store.");
-    }
+    const storeObj = stores.find((s) => s.store_id === storeId);
+    const storeName = storeObj?.name ? `"${storeObj.name}"` : "this store";
+
+    setConfirmModal({
+      isOpen: true,
+      title: "Delete Store",
+      message: `Are you sure you want to delete ${storeName}? This action cannot be undone.`,
+      confirmText: "Delete",
+      isDanger: true,
+      onConfirm: async () => {
+        setError(null);
+        try {
+          await storesApi.delete(storeId);
+          await fetchStores();
+          if (onStoresUpdated) onStoresUpdated();
+        } catch (err: any) {
+          setError(err.message || "Failed to delete store.");
+        } finally {
+          closeConfirmModal();
+        }
+      },
+    });
   };
 
   return (
@@ -162,7 +195,7 @@ export const StoreManagerModal: React.FC<StoreManagerModalProps> = ({
               <button
                 type="button"
                 onClick={resetForm}
-                className="px-3 py-1.5 text-xs font-medium text-carbon-black-700 hover:bg-carbon-black-200 rounded-lg transition-colors"
+                className="px-3 py-1.5 text-xs font-medium text-carbon-black-700 cursor-pointer hover:bg-carbon-black-200 rounded-lg transition-colors"
               >
                 Cancel
               </button>
@@ -170,13 +203,13 @@ export const StoreManagerModal: React.FC<StoreManagerModalProps> = ({
             <button
               type="submit"
               disabled={isSubmitting || !name.trim()}
-              className="px-4 py-1.5 text-xs sm:text-sm font-semibold text-white bg-dusty-olive-700 hover:bg-dusty-olive-800 rounded-lg transition-all shadow-xs disabled:opacity-50 active:scale-[0.98]"
+              className="px-4 py-1.5 text-xs sm:text-sm font-semibold text-white bg-dusty-olive-700 cursor-pointer hover:bg-dusty-olive-800 rounded-lg transition-all shadow-xs disabled:opacity-50 disabled:cursor-not-allowed active:scale-[0.98]"
             >
               {isSubmitting
                 ? "Saving..."
                 : editingStore
-                ? "Update Store"
-                : "Add Store"}
+                  ? "Update Store"
+                  : "Add Store"}
             </button>
           </div>
         </form>
@@ -233,6 +266,16 @@ export const StoreManagerModal: React.FC<StoreManagerModalProps> = ({
           )}
         </div>
       </div>
+
+      <ConfirmModal
+        isOpen={confirmModal.isOpen}
+        onClose={closeConfirmModal}
+        title={confirmModal.title}
+        message={confirmModal.message}
+        confirmText={confirmModal.confirmText}
+        isDanger={confirmModal.isDanger}
+        onConfirm={confirmModal.onConfirm}
+      />
     </Modal>
   );
 };

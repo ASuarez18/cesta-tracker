@@ -136,11 +136,11 @@ export const AddItemToListModal: React.FC<AddItemToListModalProps> = ({
             disabled={isLoadingItems}
             className="w-full px-3.5 py-2.5 text-sm bg-white border border-carbon-black-200 rounded-xl focus:outline-none focus:ring-2 focus:ring-celadon-500 text-carbon-black-900 disabled:opacity-50"
           >
-            <option value="">
+            <option value="" className="text-carbon-black-700 font-medium bg-white py-1">
               {isLoadingItems ? "Loading catalog..." : "-- Choose from Master Catalog --"}
             </option>
             {masterItems.map((item) => (
-              <option key={item.item_id} value={item.item_id}>
+              <option key={item.item_id} value={item.item_id} className="text-carbon-black-700 font-medium bg-white py-1">
                 {item.name} {item.default_price ? `($${item.default_price})` : ""}
               </option>
             ))}
@@ -186,14 +186,14 @@ export const AddItemToListModal: React.FC<AddItemToListModalProps> = ({
           <button
             type="button"
             onClick={onClose}
-            className="px-4 py-2 text-xs sm:text-sm font-medium text-carbon-black-700 hover:bg-carbon-black-100 rounded-xl transition-colors"
+            className="px-4 py-2 text-xs sm:text-sm font-medium text-carbon-black-700 cursor-pointer hover:bg-carbon-black-100 rounded-xl transition-colors"
           >
             Cancel
           </button>
           <button
             type="submit"
             disabled={isSubmitting || !selectedItemId}
-            className="px-5 py-2 text-xs sm:text-sm font-semibold text-white bg-dusty-olive-700 hover:bg-dusty-olive-800 rounded-xl transition-all shadow-xs disabled:opacity-50 active:scale-[0.98]"
+            className="px-5 py-2 text-xs sm:text-sm font-semibold text-white bg-dusty-olive-700 cursor-pointer disabled:cursor-not-allowed hover:bg-dusty-olive-800 rounded-xl transition-all shadow-xs disabled:opacity-50 active:scale-[0.98]"
           >
             {isSubmitting ? "Adding..." : "Add to List"}
           </button>

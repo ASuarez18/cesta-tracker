@@ -61,7 +61,7 @@ export const ListsDashboardView: React.FC = () => {
             className={`flex-1 sm:flex-none px-4 py-2 text-xs sm:text-sm font-semibold rounded-lg transition-all ${
               activeTab === "OPEN"
                 ? "bg-white text-carbon-black-900 shadow-2xs"
-                : "text-carbon-black-600 hover:text-carbon-black-900"
+                : "text-carbon-black-600 cursor-pointer hover:text-carbon-black-900"
             }`}
           >
             🛒 Active Runs ({lists.filter((l) => l.status === "OPEN").length})
@@ -71,7 +71,7 @@ export const ListsDashboardView: React.FC = () => {
             className={`flex-1 sm:flex-none px-4 py-2 text-xs sm:text-sm font-semibold rounded-lg transition-all ${
               activeTab === "CLOSED"
                 ? "bg-white text-carbon-black-900 shadow-2xs"
-                : "text-carbon-black-600 hover:text-carbon-black-900"
+                : "text-carbon-black-600 cursor-pointer hover:text-carbon-black-900"
             }`}
           >
             📜 History ({lists.filter((l) => l.status === "CLOSED").length})
@@ -81,7 +81,7 @@ export const ListsDashboardView: React.FC = () => {
         {/* > New List Button */}
         <button
           onClick={() => setIsCreateModalOpen(true)}
-          className="px-4 py-2.5 text-xs sm:text-sm font-semibold text-white bg-dusty-olive-700 hover:bg-dusty-olive-800 rounded-xl transition-all shadow-xs active:scale-[0.98]"
+          className="px-4 py-2.5 text-xs sm:text-sm font-semibold text-white bg-dusty-olive-700 cursor-pointer hover:bg-dusty-olive-800 rounded-xl transition-all shadow-xs active:scale-[0.98]"
         >
           + New Shopping List
         </button>

@@ -5,6 +5,8 @@ import type { Item } from "../../../types/item";
 import type { Category } from "../../../types/category";
 import { ItemCard } from "./ItemCard";
 import { ItemFormModal } from "./ItemFormModal";
+import type { ConfirmModalProps } from "../../../types/ui";
+import { ConfirmModal } from "../../ui/ConfirmModal";
 
 export const MasterCatalogList: React.FC = () => {
   // - Fetch states
@@ -20,6 +22,16 @@ export const MasterCatalogList: React.FC = () => {
   // - Modal States
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [editingItem, setEditingItem] = useState<Item | null>(null);
+
+  // - Confirmation Modal state
+  const [confirmModal, setConfirmModal] = useState<ConfirmModalProps>({
+    isOpen: false,
+    title: "",
+    message: "",
+    confirmText: "Confirm",
+    isDanger: false,
+    onConfirm: async () => {},
+  });
 
   /**
    * @function fetchCatalogData
@@ -87,21 +99,45 @@ export const MasterCatalogList: React.FC = () => {
     setEditingItem(item);
     setIsModalOpen(true);
   };
+  
+  /**
+   * @function closeConfirmModal
+   * @desc Closes the confirmation modal
+   */
+  const closeConfirmModal = () => {
+    setConfirmModal((prev) => ({ ...prev, isOpen: false }));
+  };
 
   /**
    * @function handleDelete
    * @desc Deletes an item after user confirmation and refreshes the catalog
    * @param {number} itemId - The ID of the item to delete
    */
-  const handleDelete = async (itemId: number) => {
-    if (!window.confirm("Are you sure you want to delete this product?")) return;
+  const handleDelete = (targetItem: Item | number) => {
+    const itemObj = typeof targetItem === "number" 
+      ? items.find((i) => i.item_id === targetItem)
+      : targetItem;
 
-    try {
-      await itemsApi.delete(itemId);
-      await fetchCatalogData();
-    } catch (err: any) {
-      alert(err.message || "Failed to delete item.");
-    }
+    const itemId = typeof targetItem === "number" ? targetItem : targetItem.item_id;
+    const itemName = itemObj?.name ? `"${itemObj.name}"` : "this product";
+
+    setConfirmModal({
+      isOpen: true,
+      title: "Delete Product",
+      message: `Are you sure you want to delete ${itemName} from your master catalog? This action cannot be undone.`,
+      confirmText: "Delete",
+      isDanger: true,
+      onConfirm: async () => {
+        try {
+          await itemsApi.delete(itemId);
+          await fetchCatalogData();
+        } catch (err: any) {
+          setError(err.message || "Failed to delete item.");
+        } finally {
+          closeConfirmModal();
+        }
+      },
+    });
   };
 
 
@@ -129,11 +165,11 @@ export const MasterCatalogList: React.FC = () => {
           <select
             value={selectedCategory}
             onChange={(e) => setSelectedCategory(e.target.value)}
-            className="px-3.5 py-2.5 text-sm bg-carbon-black-50/60 border border-carbon-black-200 rounded-xl focus:outline-none focus:ring-2 focus:ring-celadon-500 text-carbon-black-800 shrink-0"
+            className="px-3.5 py-2.5 text-sm bg-carbon-black-50/60 border border-carbon-black-200 rounded-xl cursor-pointer focus:outline-none focus:ring-2 focus:ring-celadon-500 text-carbon-black-800 shrink-0"
           >
-            <option value="">All Categories</option>
+            <option value="" className="text-carbon-black-700 font-medium bg-white py-1">All Categories</option>
             {categories.map((cat) => (
-              <option key={cat.category_id} value={cat.category_id}>
+              <option key={cat.category_id} value={cat.category_id} className="text-carbon-black-700 font-medium bg-white py-1">
                 {cat.name}
               </option>
             ))}
@@ -143,7 +179,7 @@ export const MasterCatalogList: React.FC = () => {
         {/* Add Button */}
         <button
           onClick={handleCreateNew}
-          className="px-4 py-2.5 text-xs sm:text-sm font-semibold text-white bg-dusty-olive-700 hover:bg-dusty-olive-800 rounded-xl transition-all shadow-xs active:scale-[0.98] shrink-0"
+          className="px-4 py-2.5 text-xs sm:text-sm font-semibold text-white bg-dusty-olive-700 cursor-pointer hover:bg-dusty-olive-800 rounded-xl transition-all shadow-xs active:scale-[0.98] shrink-0"
         >
           + Add Product
         </button>
@@ -189,6 +225,16 @@ export const MasterCatalogList: React.FC = () => {
         onClose={() => setIsModalOpen(false)}
         editingItem={editingItem}
         onItemSaved={fetchCatalogData}
+      />
+
+      <ConfirmModal
+        isOpen={confirmModal.isOpen}
+        onClose={closeConfirmModal}
+        title={confirmModal.title}
+        message={confirmModal.message}
+        confirmText={confirmModal.confirmText}
+        isDanger={confirmModal.isDanger}
+        onConfirm={confirmModal.onConfirm}
       />
     </div>
   );

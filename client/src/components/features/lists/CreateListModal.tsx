@@ -103,14 +103,14 @@ export const CreateListModal: React.FC<CreateListModalProps> = ({
           <button
             type="button"
             onClick={onClose}
-            className="px-4 py-2 text-xs sm:text-sm font-medium text-carbon-black-700 hover:bg-carbon-black-100 rounded-xl transition-colors"
+            className="px-4 py-2 text-xs sm:text-sm font-medium text-carbon-black-700 cursor-pointer hover:bg-carbon-black-100 rounded-xl transition-colors"
           >
             Cancel
           </button>
           <button
             type="submit"
             disabled={isSubmitting || !title.trim()}
-            className="px-5 py-2 text-xs sm:text-sm font-semibold text-white bg-dusty-olive-700 hover:bg-dusty-olive-800 rounded-xl transition-all shadow-xs disabled:opacity-50 active:scale-[0.98]"
+            className="px-5 py-2 text-xs sm:text-sm font-semibold text-white bg-dusty-olive-700 cursor-pointer disabled:cursor-not-allowed hover:bg-dusty-olive-800 rounded-xl transition-all shadow-xs disabled:opacity-50 active:scale-[0.98]"
           >
             {isSubmitting ? "Creating..." : "Create List"}
           </button>

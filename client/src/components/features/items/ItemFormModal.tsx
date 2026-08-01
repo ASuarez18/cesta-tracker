@@ -168,9 +168,9 @@ export const ItemFormModal: React.FC<ItemFormModalProps> = ({
             onChange={(e) => setCategoryId(e.target.value)}
             className="w-full px-3.5 py-2.5 text-sm bg-white border border-carbon-black-200 rounded-xl focus:outline-none focus:ring-2 focus:ring-celadon-500 text-carbon-black-900"
           >
-            <option value="">-- Select Category (Optional) --</option>
+            <option value="" className="text-carbon-black-700 font-medium bg-white py-1">-- Select Category (Optional) --</option>
             {categories.map((cat) => (
-              <option key={cat.category_id} value={cat.category_id}>
+              <option key={cat.category_id} value={cat.category_id} className="text-carbon-black-700 font-medium bg-white py-1">
                 {cat.name}
               </option>
             ))}
@@ -187,9 +187,9 @@ export const ItemFormModal: React.FC<ItemFormModalProps> = ({
             onChange={(e) => setStoreId(e.target.value)}
             className="w-full px-3.5 py-2.5 text-sm bg-white border border-carbon-black-200 rounded-xl focus:outline-none focus:ring-2 focus:ring-celadon-500 text-carbon-black-900"
           >
-            <option value="">-- Select Store (Optional) --</option>
+            <option value="" className="text-carbon-black-700 font-medium bg-white py-1">-- Select Store (Optional) --</option>
             {stores.map((store) => (
-              <option key={store.store_id} value={store.store_id}>
+              <option key={store.store_id} value={store.store_id} className="text-carbon-black-700 font-medium bg-white py-1">
                 {store.name}
               </option>
             ))}
@@ -201,14 +201,14 @@ export const ItemFormModal: React.FC<ItemFormModalProps> = ({
           <button
             type="button"
             onClick={onClose}
-            className="px-4 py-2 text-xs sm:text-sm font-medium text-carbon-black-700 hover:bg-carbon-black-100 rounded-xl transition-colors"
+            className="px-4 py-2 text-xs sm:text-sm font-medium text-carbon-black-700 cursor-pointer hover:bg-carbon-black-100 rounded-xl transition-colors"
           >
             Cancel
           </button>
           <button
             type="submit"
             disabled={isSubmitting || !name.trim()}
-            className="px-5 py-2 text-xs sm:text-sm font-semibold text-white bg-dusty-olive-700 hover:bg-dusty-olive-800 rounded-xl transition-all shadow-xs disabled:opacity-50 active:scale-[0.98]"
+            className="px-5 py-2 text-xs sm:text-sm font-semibold text-white bg-dusty-olive-700 cursor-pointer hover:bg-dusty-olive-800 rounded-xl transition-all shadow-xs disabled:opacity-50 disabled:cursor-not-allowed active:scale-[0.98]"
           >
             {isSubmitting
               ? "Saving..."

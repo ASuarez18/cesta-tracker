@@ -62,7 +62,7 @@ export const Modal: React.FC<ModalProps> = ({
           </h3>
           <button
             onClick={onClose}
-            className="p-1.5 text-carbon-black-500 hover:text-carbon-black-900 hover:bg-carbon-black-100 rounded-lg transition-colors focus:outline-none focus:ring-2 focus:ring-celadon-500"
+            className="p-1.5 text-carbon-black-500 hover:text-carbon-black-900 cursor-pointer hover:bg-carbon-black-100 rounded-lg transition-colors focus:outline-none focus:ring-2 focus:ring-celadon-500"
             aria-label="Close modal"
           >
             <svg

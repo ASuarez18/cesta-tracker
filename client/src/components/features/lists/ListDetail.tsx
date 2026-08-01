@@ -1,8 +1,10 @@
 import React, { useState, useEffect, useMemo } from "react";
 import { listsApi } from "../../../lib/api/lists";
 import type { ShoppingList, ListItem } from "../../../types/list";
+import type { ConfirmModalProps } from "../../../types/ui";
 import { formatCurrency } from "../../../utils/formatters";
 import { AddItemToListModal } from "./AddItemToListModal";
+import { ConfirmModal } from "../../ui/ConfirmModal";
 
 interface ListDetailProps {
   listId: number;
@@ -17,6 +19,16 @@ export const ListDetail: React.FC<ListDetailProps> = ({ listId }) => {
   // - Modals states
   const [isAddItemModalOpen, setIsAddItemModalOpen] = useState(false);
   const [isClosingList, setIsClosingList] = useState(false);
+
+  // - Confirmation Modal state
+  const [confirmModal, setConfirmModal] = useState<ConfirmModalProps>({
+    isOpen: false,
+    title: "",
+    message: "",
+    confirmText: "Confirm",
+    isDanger: false,
+    onConfirm: async () => {},
+  });
 
   /**
    * @function fetchListDetail
@@ -148,36 +160,59 @@ export const ListDetail: React.FC<ListDetailProps> = ({ listId }) => {
    * @desc Removes an item from the list and updates the server
    * @param {number} listItemId - The ID of the list item to remove
    */
-  const handleRemoveItem = async (listItemId: number) => {
-    if (!isOpen || !window.confirm("Remove this item from list?")) return;
+  const handleRemoveItem = (listItemId: number) => {
+    if (!isOpen) return;
 
-    setItems((prevItems) =>
-      prevItems.filter((item) => item.list_item_id !== listItemId)
-    );
-
-    try {
-      await listsApi.removeItem(listItemId);
-    } catch (err) {
-      fetchListDetail();
-    }
+    setConfirmModal({
+      isOpen: true,
+      title: "Remove Item",
+      message: "Are you sure you want to remove this item from your shopping list?",
+      confirmText: "Remove",
+      isDanger: true,
+      onConfirm: async () => {
+        setItems((prev) => prev.filter((i) => i.list_item_id !== listItemId));
+        try {
+          await listsApi.removeItem(listItemId);
+        } catch {
+          fetchListDetail();
+        }
+      },
+    });
   };
 
   /**
    * @function handleCloseList
    * @desc Closes the shopping list and updates the server
    */
-  const handleCloseList = async () => {
-    if (!isOpen || !window.confirm("Close this list? It will be marked as completed.")) return;
+  const handleCloseList = () => {
+    if (!isOpen) return;
 
-    setIsClosingList(true);
-    try {
-      await listsApi.closeList(listId);
-      window.location.href = "/app/lists";
-    } catch (err: any) {
-      setError(err.message || "Failed to close list.");
-    } finally {
-      setIsClosingList(false);
-    }
+    setConfirmModal({
+      isOpen: true,
+      title: "Finish Shopping",
+      message: "Close this shopping list? It will be archived and marked as completed.",
+      confirmText: "Close List",
+      isDanger: false,
+      onConfirm: async () => {
+        setIsClosingList(true);
+        try {
+          await listsApi.closeList(listId);
+          window.location.href = "/app/lists";
+        } catch (err: any) {
+          setError(err.message || "Failed to close list.");
+        } finally {
+          setIsClosingList(false);
+        }
+      },
+    });
+  };
+
+  /**
+   * @function closeConfirmModal
+   * @desc Closes the confirmation modal without taking any action
+   */
+  const closeConfirmModal = () => {
+    setConfirmModal((prev) => ({ ...prev, isOpen: false }));
   };
 
   if (isLoading) {
@@ -233,14 +268,14 @@ export const ListDetail: React.FC<ListDetailProps> = ({ listId }) => {
               <>
                 <button
                   onClick={() => setIsAddItemModalOpen(true)}
-                  className="px-3.5 py-2 text-xs sm:text-sm font-semibold text-white bg-dusty-olive-700 hover:bg-dusty-olive-800 rounded-xl transition-all shadow-xs active:scale-[0.98]"
+                  className="px-3.5 py-2 text-xs sm:text-sm font-semibold text-white bg-dusty-olive-700 cursor-pointer hover:bg-dusty-olive-800 rounded-xl transition-all shadow-xs active:scale-[0.98]"
                 >
                   + Add Item
                 </button>
                 <button
                   onClick={handleCloseList}
                   disabled={isClosingList}
-                  className="px-3.5 py-2 text-xs sm:text-sm font-semibold text-carbon-black-800 bg-carbon-black-100 hover:bg-carbon-black-200 rounded-xl transition-all active:scale-[0.98]"
+                  className="px-3.5 py-2 text-xs sm:text-sm font-semibold text-carbon-black-800 bg-carbon-black-100 cursor-pointer hover:bg-carbon-black-200 rounded-xl transition-all active:scale-[0.98]"
                 >
                   Finish Shopping
                 </button>
@@ -325,7 +360,7 @@ export const ListDetail: React.FC<ListDetailProps> = ({ listId }) => {
             {isOpen && (
               <button
                 onClick={() => setIsAddItemModalOpen(true)}
-                className="inline-block px-4 py-2 text-xs font-semibold text-white bg-dusty-olive-700 hover:bg-dusty-olive-800 rounded-xl"
+                className="inline-block px-4 py-2 text-xs font-semibold text-white bg-dusty-olive-700 cursor-pointer hover:bg-dusty-olive-800 rounded-xl"
               >
                 + Add Item Now
               </button>
@@ -374,7 +409,7 @@ export const ListDetail: React.FC<ListDetailProps> = ({ listId }) => {
                       <div className="flex items-center border border-carbon-black-200 rounded-xl bg-carbon-black-50/60 overflow-hidden">
                         <button
                           onClick={() => handleQuantityChange(item, -1)}
-                          className="px-2 py-1 text-xs font-bold text-carbon-black-700 hover:bg-carbon-black-200 transition-colors"
+                          className="px-2 py-1 text-xs font-bold text-carbon-black-700 cursor-pointer hover:bg-carbon-black-200 transition-colors"
                         >
                           -
                         </button>
@@ -383,7 +418,7 @@ export const ListDetail: React.FC<ListDetailProps> = ({ listId }) => {
                         </span>
                         <button
                           onClick={() => handleQuantityChange(item, 1)}
-                          className="px-2 py-1 text-xs font-bold text-carbon-black-700 hover:bg-carbon-black-200 transition-colors"
+                          className="px-2 py-1 text-xs font-bold text-carbon-black-700 cursor-pointer hover:bg-carbon-black-200 transition-colors"
                         >
                           +
                         </button>
@@ -401,7 +436,7 @@ export const ListDetail: React.FC<ListDetailProps> = ({ listId }) => {
                     {isOpen && (
                       <button
                         onClick={() => handleRemoveItem(item.list_item_id)}
-                        className="p-1 text-xs text-red-500 hover:text-red-700 hover:bg-red-50 rounded-lg transition-colors"
+                        className="p-1 text-xs text-red-500 hover:text-red-700 cursor-pointer hover:bg-red-50 rounded-lg transition-colors"
                         title="Remove Item"
                       >
                         🗑️
@@ -415,11 +450,26 @@ export const ListDetail: React.FC<ListDetailProps> = ({ listId }) => {
         )}
       </div>
 
+      {/* Modals */}
       <AddItemToListModal
         isOpen={isAddItemModalOpen}
         onClose={() => setIsAddItemModalOpen(false)}
         listId={listId}
         onItemAdded={fetchListDetail}
+      />
+
+      {/* Confirmation Modal */}
+      <ConfirmModal
+        isOpen={confirmModal.isOpen}
+        onClose={closeConfirmModal}
+        title={confirmModal.title}
+        message={confirmModal.message}
+        confirmText={confirmModal.confirmText}
+        isDanger={confirmModal.isDanger}
+        onConfirm={async () => {
+          await confirmModal.onConfirm();
+          closeConfirmModal();
+        }}
       />
     </div>
   );
