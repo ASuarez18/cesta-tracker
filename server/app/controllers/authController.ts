@@ -53,6 +53,8 @@ export const login = async (req: Request, res: Response) => {
     if (!email || !password) {
       return res.status(400).json({ error: "Email and password are required." });
     }
+    console.log("Is Secure?", req.secure);
+    console.log("X-Forwarded-Proto:", req.headers["x-forwarded-proto"]);
 
     const user = await UserModel.findUserByEmail(email);
     if (!user) {
