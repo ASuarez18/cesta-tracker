@@ -1,5 +1,33 @@
 ---
+const pathname = Astro.url.pathname;
 
+/**
+ * @function getDesktopClass
+ * @desc Gets the css class for the desktop link based on the current pathname
+ * @param {string} path - Link path
+ * @returns {string} - Class string
+ */
+const getDesktopClass = (path: string) => {
+  const isActive = pathname === path || (path !== '/app/dashboard' && pathname.startsWith(path));
+  
+  return isActive
+    ? "px-3 py-2 text-sm font-semibold text-dusty-olive-800 bg-dusty-olive-100 rounded-lg transition-colors"
+    : "px-3 py-2 text-sm font-medium text-carbon-black-700 hover:text-celadon-700 hover:bg-carbon-black-50 rounded-lg transition-colors";
+};
+
+/**
+ * @function getMobileClass
+ * @desc Gets the css class for the mobile link based on the current pathname
+ * @param {string} path - Link path
+ * @returns {string} - Class string
+ */
+const getMobileClass = (path: string) => {
+  const isActive = pathname === path || (path !== '/app/dashboard' && pathname.startsWith(path));
+
+  return isActive
+    ? "flex flex-col items-center gap-1 font-semibold px-2 py-1 text-dusty-olive-800 bg-dusty-olive-300 rounded-lg transition-colors "
+    : "flex flex-col items-center gap-1 text-carbon-black-600 hover:text-celadon-700";
+};
 ---
 
 <header class="bg-white border-b border-carbon-black-100 sticky top-0 z-30">
@@ -9,35 +37,22 @@
       <!-- > Branding -->
       <div class="flex items-center gap-8">
         <a href="/app/dashboard" class="flex items-center gap-2 text-xl font-bold font-display text-carbon-black-900 tracking-tight">
-          <!-- <span class="text-2xl">🛒</span> -->
           <img src="/favicon.svg" alt="Cesta Tracker Logo" class="h-8 w-auto" />
           <span class="hidden sm:inline">Cesta Tracker</span>
         </a>
 
-        <!-- > Desktop -->
+        <!-- > Desktop Navigation -->
         <nav class="hidden md:flex items-center gap-1">
-          <a
-            href="/app/dashboard"
-            class="px-3 py-2 text-sm font-medium text-carbon-black-700 hover:text-celadon-700 hover:bg-carbon-black-50 rounded-lg transition-colors"
-          >
+          <a href="/app/dashboard" class={getDesktopClass("/app/dashboard")}>
             Dashboard
           </a>
-          <a
-            href="/app/lists"
-            class="px-3 py-2 text-sm font-medium text-carbon-black-700 hover:text-celadon-700 hover:bg-carbon-black-50 rounded-lg transition-colors"
-          >
+          <a href="/app/lists" class={getDesktopClass("/app/lists")}>
             Lists
           </a>
-          <a
-            href="/app/items"
-            class="px-3 py-2 text-sm font-medium text-carbon-black-700 hover:text-celadon-700 hover:bg-carbon-black-50 rounded-lg transition-colors"
-          >
+          <a href="/app/items" class={getDesktopClass("/app/items")}>
             Catalog
           </a>
-          <a
-            href="/app/categories"
-            class="px-3 py-2 text-sm font-medium text-carbon-black-700 hover:text-celadon-700 hover:bg-carbon-black-50 rounded-lg transition-colors"
-          >
+          <a href="/app/categories" class={getDesktopClass("/app/categories")}>
             Categories & Stores
           </a>
         </nav>
@@ -57,21 +72,21 @@
 
     </div>
 
-    <!-- > Mobile -->
+    <!-- > Mobile Navigation -->
     <nav class="md:hidden flex items-center justify-around border-t border-carbon-black-100 py-2 text-xs">
-      <a href="/app/dashboard" class="flex flex-col items-center gap-1 text-carbon-black-600 hover:text-celadon-700">
+      <a href="/app/dashboard" class={getMobileClass("/app/dashboard")}>
         <span class="text-base">📊</span>
         <span>Dashboard</span>
       </a>
-      <a href="/app/lists" class="flex flex-col items-center gap-1 text-carbon-black-600 hover:text-celadon-700">
+      <a href="/app/lists" class={getMobileClass("/app/lists")}>
         <span class="text-base">📝</span>
         <span>Lists</span>
       </a>
-      <a href="/app/items" class="flex flex-col items-center gap-1 text-carbon-black-600 hover:text-celadon-700">
+      <a href="/app/items" class={getMobileClass("/app/items")}>
         <span class="text-base">📦</span>
         <span>Catalog</span>
       </a>
-      <a href="/app/categories" class="flex flex-col items-center gap-1 text-carbon-black-600 hover:text-celadon-700">
+      <a href="/app/categories" class={getMobileClass("/app/categories")}>
         <span class="text-base">🏷️</span>
         <span>Categories</span>
       </a>
