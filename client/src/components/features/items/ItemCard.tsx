@@ -8,10 +8,49 @@ interface ItemCardProps {
   onDelete: (itemId: number) => void;
 }
 
-export const ItemCard: React.FC<ItemCardProps> = ({ item, onEdit, onDelete }) => {
+export const ItemCard: React.FC<ItemCardProps> = ({
+  item,
+  onEdit,
+  onDelete,
+}) => {
   const categoryColor = item.category_color || "#898e71";
 
-  console.log("ItemCard Rendered:", item); // Debugging log
+  // console.log("ItemCard Rendered:", item);
+
+  /**
+   * @function isLightColor
+   * @desc Determines if a given hex color is considered "light" based on its luminance
+   * @param {string} hexColor - The hex color code to evaluate (e.g., "#FFFFFF" or "#FFF")
+   * @returns {boolean} - Returns true if the color is light, false otherwise
+   */
+  const isLightColor = (hexColor?: string): boolean => {
+    if (!hexColor) return false;
+
+    const hex = hexColor.replace("#", "");
+
+    const r = parseInt(
+      hex.length === 3 ? hex[0] + hex[0] : hex.substring(0, 2),
+      16,
+    );
+    const g = parseInt(
+      hex.length === 3 ? hex[1] + hex[1] : hex.substring(2, 4),
+      16,
+    );
+    const b = parseInt(
+      hex.length === 3 ? hex[2] + hex[2] : hex.substring(4, 6),
+      16,
+    );
+
+    const yiq = (r * 299 + g * 587 + b * 114) / 1000;
+
+    return yiq > 200;
+  };
+
+  const isLight = isLightColor(categoryColor);
+
+  const badgeTextColor = isLight ? "#27272a" : categoryColor; 
+  const badgeBgColor = isLight ? "#f4f4f5" : `${categoryColor}15`; 
+  const badgeBorderColor = isLight ? "#d4d4d8" : `${categoryColor}40`; 
 
   return (
     <div className="bg-white border border-carbon-black-100 rounded-2xl p-4 sm:p-5 shadow-2xs hover:border-carbon-black-200 transition-all flex flex-col justify-between gap-3 group">
@@ -54,9 +93,9 @@ export const ItemCard: React.FC<ItemCardProps> = ({ item, onEdit, onDelete }) =>
           <span
             className="inline-flex items-center gap-1.5 px-2.5 py-1 rounded-lg border font-medium truncate max-w-37.5"
             style={{
-              backgroundColor: `${categoryColor}15`,
-              color: categoryColor,
-              borderColor: `${categoryColor}40`,
+              backgroundColor: badgeBgColor,
+              color: badgeTextColor,
+              borderColor: badgeBorderColor,
             }}
           >
             <span
