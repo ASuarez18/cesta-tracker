@@ -62,35 +62,47 @@ export const ListDetail: React.FC<ListDetailProps> = ({ listId }) => {
   }, [listId]);
 
   /**
-   * @var {totalSpent, completedCount}
+   * @var {totalSpent, totalEstimated, completedCount, }
    * @desc Calculates the total spent and completed item count for the list
    */
-  const { totalSpent, completedCount } = useMemo(() => {
-    if (!Array.isArray(items)) return { totalSpent: 0, completedCount: 0 };
+  const { totalSpent, totalEstimated, completedCount } = useMemo(() => {
+    if (!Array.isArray(items)) {
+      return { totalSpent: 0, totalEstimated: 0, completedCount: 0 };
+    }
 
-    let total = 0;
+    let spent = 0;
+    let estimated = 0;
     let completed = 0;
 
     items.forEach((item) => {
       const price = Number(item.price_at_purchase) || 0;
       const qty = Number(item.quantity) || 1;
-      
-      total += price * qty;
+      const itemSubtotal = price * qty;
+
+      estimated += itemSubtotal;
+
       if (item.is_completed) {
+        spent += itemSubtotal;
         completed += 1;
       }
     });
 
-    return { totalSpent: total, completedCount: completed };
+    return {
+      totalSpent: spent,
+      totalEstimated: estimated,
+      completedCount: completed,
+    };
   }, [items]);
 
   const listTitle = (list as any)?.title || (list as any)?.name || `List #${listId}`;
   const budget = list?.budget ?? 0;
   const hasBudget = list?.budget !== null && list?.budget !== undefined && list.budget > 0;
-  const isOverBudget = hasBudget && totalSpent > budget;
   
   const currentStatus = (list?.status || "OPEN");
   const isOpen = currentStatus === "OPEN";
+
+  const currentTotal = isOpen ? totalEstimated : totalSpent;
+  const isOverBudget = hasBudget && currentTotal > budget;
 
   /**
    * @function handleToggleComplete
@@ -292,14 +304,15 @@ export const ListDetail: React.FC<ListDetailProps> = ({ listId }) => {
         <div className="grid grid-cols-2 sm:grid-cols-3 gap-4 text-sm">
           <div>
             <span className="block text-xs text-carbon-black-500 font-medium mb-0.5">
-              Total Estimated
+              Total {isOpen ? "Estimated": "Spent"}
             </span>
             <span
               className={`text-lg sm:text-xl font-bold font-display ${
                 isOverBudget ? "text-red-600" : "text-carbon-black-900"
               }`}
             >
-              {formatCurrency(totalSpent)}
+              {formatCurrency(currentTotal)}
+              {}
             </span>
           </div>
 
@@ -319,10 +332,10 @@ export const ListDetail: React.FC<ListDetailProps> = ({ listId }) => {
               </span>
               <span
                 className={`text-lg sm:text-xl font-bold font-display ${
-                  budget - totalSpent < 0 ? "text-red-600" : "text-celadon-700"
+                  budget - currentTotal < 0 ? "text-red-600" : "text-celadon-700"
                 }`}
               >
-                {formatCurrency(budget - totalSpent)}
+                {formatCurrency(budget - currentTotal)}
               </span>
             </div>
           )}
@@ -337,7 +350,7 @@ export const ListDetail: React.FC<ListDetailProps> = ({ listId }) => {
                   isOverBudget ? "bg-red-500" : "bg-celadon-500"
                 }`}
                 style={{
-                  width: `${Math.min(100, (totalSpent / budget) * 100)}%`,
+                  width: `${Math.min(100, (currentTotal / budget) * 100)}%`,
                 }}
               />
             </div>

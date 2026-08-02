@@ -11,6 +11,22 @@ const { header = "Authentication", title = `${header} - Cesta Tracker` } =
 ---
 
 <BaseLayout title={title}>
+  <script>
+    import { authApi } from "../lib/api/auth";
+
+    async function checkAuthAndRedirect() {
+      try {
+        await authApi.getMe();
+
+        if (window.location.pathname.startsWith("/login") || window.location.pathname.startsWith("/register")) {
+          window.location.href = "/app/dashboard";
+        }
+      } catch {
+      }
+    }
+
+    checkAuthAndRedirect();
+  </script>
   <main class="flex-1 flex items-center justify-center p-4 sm:p-6 lg:p-8">
     <div
       class="w-full max-w-md bg-white p-6 sm:p-8 rounded-2xl shadow-sm border border-carbon-black-100"

@@ -10,13 +10,30 @@ const { title = "Dashboard - Cesta Tracker" } = Astro.props;
 ---
 
 <BaseLayout title={title}>
+  <script>
+    import { authApi } from "../lib/api/auth";
+
+    async function checkAuthAndRedirect() {
+      try {
+        await authApi.getMe();
+      } catch (error) {
+        window.location.href = "/login";
+      }
+    }
+
+    checkAuthAndRedirect();
+  </script>
   <Navbar />
 
-  <main class="flex-1 max-w-7xl w-full mx-auto px-4 sm:px-6 lg:px-8 py-6 sm:py-8">
+  <main
+    class="flex-1 max-w-7xl w-full mx-auto px-4 sm:px-6 lg:px-8 py-6 sm:py-8"
+  >
     <slot />
   </main>
 
-  <footer class="bg-white border-t border-carbon-black-100 py-4 text-center text-xs sm:text-sm text-carbon-black-600">
+  <footer
+    class="bg-white border-t border-carbon-black-100 py-4 text-center text-xs sm:text-sm text-carbon-black-600"
+  >
     &copy; {new Date().getFullYear()} Cesta Tracker. All rights reserved.
   </footer>
 </BaseLayout>

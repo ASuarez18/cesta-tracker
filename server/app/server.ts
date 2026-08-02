@@ -12,9 +12,9 @@ import listsRoutes from "./routes/listsRoutes.ts";
 const PORT = process.env.PORT || 3000;
 
 const app = express();
+const isProduction = process.env.NODE_ENV === "production";
 
-
-
+app.set("trust proxy", isProduction ? true : 1);
 
 // > CORS 
 const corsOptions = {
@@ -24,14 +24,13 @@ const corsOptions = {
 
 app.use(cors(corsOptions));
 
-app.set("trust proxy", true);
 
 // > Cookie Session
 const sessionMiddleware = cookieSession({
     name: "session",
     keys: [process.env.SESSION_SECRET || "secret"],
-    sameSite: "none",
-    secure: process.env.NODE_ENV === "production",
+    sameSite: isProduction ? "none" : "lax",
+    secure: isProduction,
     httpOnly: true,
   });
 

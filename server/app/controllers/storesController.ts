@@ -38,10 +38,6 @@ export const createStore = async (req: Request, res: Response) => {
       return res.status(400).json({ error: "Store name must be 50 characters or less." });
     }
 
-    if (!/^[a-zA-Z0-9\s]+$/.test(name)) {
-      return res.status(400).json({ error: "Store name can only contain letters, numbers, and spaces." });
-    }
-
     const newStore = await StoreModel.createStore(userId, name.trim());
 
     if (!newStore) {

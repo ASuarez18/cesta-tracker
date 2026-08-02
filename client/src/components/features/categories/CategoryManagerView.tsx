@@ -61,7 +61,7 @@ export const CategoryManagerView: React.FC = () => {
             <div className="flex items-center gap-2">
               <span className="text-xl">🏷️</span>
               <h2 className="text-lg sm:text-xl font-bold font-display text-carbon-black-900">
-                Categories ({categories.length})
+                Categories ({categories.length || 0})
               </h2>
             </div>
             <button
@@ -117,7 +117,7 @@ export const CategoryManagerView: React.FC = () => {
             <div className="flex items-center gap-2">
               <span className="text-xl">🏪</span>
               <h2 className="text-lg sm:text-xl font-bold font-display text-carbon-black-900">
-                Stores ({stores.length})
+                Stores ({stores.length || 0})
               </h2>
             </div>
             <button
